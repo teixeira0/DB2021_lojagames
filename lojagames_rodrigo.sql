@@ -93,16 +93,6 @@ primary key (desejos_item_id, usuario_username, jogo_id),
 foreign key (usuario_username) references Usuario(usuario_username),
 foreign key (jogo_id) references Jogo(jogo_id));
 
-create table ListaDesejosItem(
-desejos_item_id integer NOT NULL AUTO_INCREMENT,
-usuario_username varchar(20) NOT NULL,
-jogo_id integer NOT NULL,
-desejos_item_dataadicao DATE NOT NULL,
-desejos_item_prioridade integer NOT NULL,
-primary key (desejos_item_id, usuario_username, jogo_id),
-foreign key (usuario_username) references Usuario(usuario_username),
-foreign key (jogo_id) references Jogo(jogo_id));
-
 create table BibliotecaItem(
 biblioteca_item_id integer NOT NULL AUTO_INCREMENT,
 usuario_username varchar(20) NOT NULL,
@@ -111,3 +101,87 @@ biblioteca_item_tempojogo TIME NOT NULL,
 primary key (biblioteca_item_id, usuario_username, jogo_id),
 foreign key (usuario_username) references Usuario(usuario_username),
 foreign key (jogo_id) references Jogo(jogo_id));
+
+insert into usuario values('teixeira0', 'Teixeira');
+insert into usuario values('jackfmd', 'Jack');
+insert into usuario values('psukiyama', 'Pedro');
+insert into usuario values('olgamorais', 'Olga');
+insert into usuario values('claraiane', 'Clara');
+
+insert into desenvolvedor (desenvolvedor_nome, desenvolvedor_paginaweb) values('Mojang', 'mojang.com');
+insert into desenvolvedor (desenvolvedor_nome, desenvolvedor_paginaweb) values('Treyarc', 'treyarc.com');
+insert into desenvolvedor (desenvolvedor_nome, desenvolvedor_paginaweb) values('Ubisoft Montreal', 'ubisoft.ca');
+insert into desenvolvedor (desenvolvedor_nome, desenvolvedor_paginaweb) values('Nintendo Japan', 'nintendo.co.jp');
+insert into desenvolvedor (desenvolvedor_nome, desenvolvedor_paginaweb) values('343 Studios', '343studios.com');
+
+insert into distribuidora (distribuidora_nome, distribuidora_paginaweb) values('Microsoft', 'microsoft.com');
+insert into distribuidora (distribuidora_nome, distribuidora_paginaweb) values('Nintendo', 'nintendo.com');
+insert into distribuidora (distribuidora_nome, distribuidora_paginaweb) values('Ubisoft', 'Ubisoft.com');
+insert into distribuidora (distribuidora_nome, distribuidora_paginaweb) values('Activision', 'activision.com');
+insert into distribuidora (distribuidora_nome, distribuidora_paginaweb) values('Sega', 'sega.com');
+
+insert into genero (genero_nome) values('First Person Shooter');
+insert into genero (genero_nome) values('Plataforma');
+insert into genero (genero_nome) values('Mundo Aberto');
+insert into genero (genero_nome) values('Aventura');
+insert into genero (genero_nome) values('Multiplayer'); 
+
+insert into jogo (desenvolvedor_id, distribuidora_id, jogo_nome, jogo_preco, jogo_lancamento, jogo_foto, jogo_classificacao) 
+values ((SELECT desenvolvedor_id from desenvolvedor where desenvolvedor_nome = '343 Studios'), 
+        (SELECT distribuidora_id from distribuidora where distribuidora_nome = 'Microsoft'),
+        'Halo', 100, DATE('2010-10-05'), LOAD_FILE("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/games/halo.jfif"), '18 anos');
+
+insert into jogo (desenvolvedor_id, distribuidora_id, jogo_nome, jogo_preco, jogo_lancamento, jogo_foto, jogo_classificacao) 
+values ((SELECT desenvolvedor_id from desenvolvedor where desenvolvedor_nome = 'Nintendo Japan'), 
+        (SELECT distribuidora_id from distribuidora where distribuidora_nome = 'Nintendo'),
+        'Super Mario', 200, DATE('2001-01-27'), LOAD_FILE("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/games/mario.png"), 'Livre');
+        
+insert into jogo (desenvolvedor_id, distribuidora_id, jogo_nome, jogo_preco, jogo_lancamento, jogo_foto, jogo_classificacao) 
+values ((SELECT desenvolvedor_id from desenvolvedor where desenvolvedor_nome = 'Ubisoft Montreal'), 
+        (SELECT distribuidora_id from distribuidora where distribuidora_nome = 'Ubisoft'),
+        'Assassins Creed', 50, DATE('2006-07-31'), LOAD_FILE("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/games/assassins.webp"), '18 anos');
+        
+insert into jogo (desenvolvedor_id, distribuidora_id, jogo_nome, jogo_preco, jogo_lancamento, jogo_foto, jogo_classificacao) 
+values ((SELECT desenvolvedor_id from desenvolvedor where desenvolvedor_nome = 'Treyarc'), 
+        (SELECT distribuidora_id from distribuidora where distribuidora_nome = 'Activision'),
+        'Call of Duty', 100, DATE('2021-02-27'), LOAD_FILE("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/games/cod.jpg"), '18 anos');
+
+insert into jogo (desenvolvedor_id, distribuidora_id, jogo_nome, jogo_preco, jogo_lancamento, jogo_foto, jogo_classificacao) 
+values ((SELECT desenvolvedor_id from desenvolvedor where desenvolvedor_nome = 'Mojang'), 
+        (SELECT distribuidora_id from distribuidora where distribuidora_nome = 'Microsoft'),
+        'Minecraft', 30, DATE('2011-05-20'), LOAD_FILE("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/games/minecraft.jpg"), '10 anos');
+
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Halo"),
+    (SELECT genero_id from genero where genero_nome = "First Person Shooter"));
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Halo"),
+    (SELECT genero_id from genero where genero_nome = "Aventura"));
+
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Super Mario"),
+    (SELECT genero_id from genero where genero_nome = "Plataforma"));
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Super Mario"),
+    (SELECT genero_id from genero where genero_nome = "Aventura"));
+
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Assassins Creed"),
+    (SELECT genero_id from genero where genero_nome = "Aventura"));
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Assassins Creed"),
+    (SELECT genero_id from genero where genero_nome = "Mundo Aberto"));
+
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Call of Duty"),
+    (SELECT genero_id from genero where genero_nome = "First Person Shooter"));
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Call of Duty"),
+    (SELECT genero_id from genero where genero_nome = "Multiplayer"));
+
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Minecraft"),
+    (SELECT genero_id from genero where genero_nome = "Mundo Aberto"));
+insert into jogogenero values (
+	(SELECT jogo_id from jogo where jogo_nome = "Minecraft"),
+    (SELECT genero_id from genero where genero_nome = "Multiplayer"));
