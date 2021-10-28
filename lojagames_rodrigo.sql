@@ -1,3 +1,4 @@
+-- drop database lojagames_rodrigo;
 create database lojagames_rodrigo;
 use lojagames_rodrigo;
 
@@ -185,3 +186,134 @@ insert into jogogenero values (
 insert into jogogenero values (
 	(SELECT jogo_id from jogo where jogo_nome = "Minecraft"),
     (SELECT genero_id from genero where genero_nome = "Multiplayer"));
+
+insert into usuarioamigo values ('teixeira0', 'jackfmd');
+insert into usuarioamigo values ('teixeira0', 'olgamorais');
+
+insert into usuarioamigo values ('claraiane', 'olgamorais');
+insert into usuarioamigo values ('claraiane', 'jackfmd');
+
+insert into usuarioamigo values ('jackfmd', 'claraiane');
+insert into usuarioamigo values ('jackfmd', 'psukiyama');
+
+insert into usuarioamigo values ('olgamorais', 'claraiane');
+insert into usuarioamigo values ('olgamorais', 'teixeira0');
+
+insert into usuarioamigo values ('psukiyama', 'teixeira0');
+insert into usuarioamigo values ('psukiyama', 'jackfmd');
+
+insert into carteiravirtual (usuario_username, carteira_saldo) values ('claraiane', 50);
+insert into carteiravirtual (usuario_username, carteira_saldo) values ('psukiyama', 50);
+insert into carteiravirtual (usuario_username, carteira_saldo) values ('jackfmd', 50);
+insert into carteiravirtual (usuario_username, carteira_saldo) values ('teixeira0', 50);
+insert into carteiravirtual (usuario_username, carteira_saldo) values ('olgamorais', 50);
+
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), "O Primeiro Passo", "Entrou no jogo pela primeira vez");
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), "Terminou!", "Finalizou o jogo!");
+
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), "O Primeiro Passo", "Entrou no jogo pela primeira vez");
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), "Terminou!", "Finalizou o jogo!");
+
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), "O Primeiro Passo", "Entrou no jogo pela primeira vez");
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), "Terminou!", "Finalizou o jogo!");
+
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Assassins Creed'), "O Primeiro Passo", "Entrou no jogo pela primeira vez");
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Assassins Creed'), "Terminou!", "Finalizou o jogo!");
+
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), "O Primeiro Passo", "Entrou no jogo pela primeira vez");
+insert into conquista (jogo_id, conquista_nome, conquista_descricao) values (
+(SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), "Terminou!", "Finalizou o jogo!");
+
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'claraiane', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), DATE('2021-02-23'), 1);
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'claraiane', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), DATE('2021-05-12'), 2);
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'claraiane', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), TIME('01:25:00'));
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'claraiane', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), TIME('02:35:00'));
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'claraiane'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'),
+DATE('2020-04-29'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Call of Duty'), 'Cartao de Credito');
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'claraiane'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'),
+DATE('2020-07-14'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Minecraft'), 'Boleto');
+insert into usuarioconquista values ('claraiane', 5); 
+insert into usuarioconquista values ('claraiane', 3); 
+
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'olgamorais', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), DATE('2021-02-23'), 1);
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'olgamorais', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), DATE('2021-05-12'), 2);
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'olgamorais', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), TIME('01:25:00'));
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'olgamorais', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), TIME('02:35:00'));
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'olgamorais'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'),
+DATE('2020-04-29'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Call of Duty'), 'Cartao de Credito');
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'olgamorais'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'),
+DATE('2020-07-14'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Halo'), 'Boleto');
+insert into usuarioconquista values ('olgamorais', 5);
+insert into usuarioconquista values ('olgamorais', 1);  
+
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'jackfmd', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), DATE('2021-02-23'), 1);
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'jackfmd', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Assassins Creed'), DATE('2021-05-12'), 2);
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'jackfmd', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), TIME('01:25:00'));
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'jackfmd', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), TIME('02:35:00'));
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'jackfmd'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'),
+DATE('2020-04-29'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Super Mario'), 'Cartao de Credito');
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'jackfmd'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'),
+DATE('2020-07-14'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Minecraft'), 'Boleto');
+insert into usuarioconquista values ('jackfmd', 9);
+insert into usuarioconquista values ('jackfmd', 3);  
+
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'psukiyama', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Super Mario'), DATE('2021-02-23'), 1);
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'psukiyama', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), DATE('2021-05-12'), 2);
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'psukiyama', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), TIME('01:25:00'));
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'psukiyama', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), TIME('02:35:00'));
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'psukiyama'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'),
+DATE('2020-04-29'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Call of Duty'), 'Cartao de Credito');
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'psukiyama'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'),
+DATE('2020-07-14'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Minecraft'), 'Boleto');
+insert into usuarioconquista values ('psukiyama', 5);
+insert into usuarioconquista values ('psukiyama', 3);  
+
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'teixeira0', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Minecraft'), DATE('2021-02-23'), 1);
+insert into listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) values (
+'teixeira0', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Halo'), DATE('2021-05-12'), 2);
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'teixeira0', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'), TIME('01:25:00'));
+insert into bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) values (
+'teixeira0', (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Assassins Creed'), TIME('02:35:00'));
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'teixeira0'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Call of Duty'),
+DATE('2020-04-29'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Call of Duty'), 'Cartao de Credito');
+insert into transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) values (
+(SELECT carteira_id FROM carteiravirtual WHERE usuario_username = 'teixeira0'), (SELECT jogo_id FROM jogo WHERE jogo_nome = 'Assassins Creed'),
+DATE('2020-07-14'), (SELECT jogo_preco FROM jogo WHERE jogo_nome = 'Assassins Creed'), 'Boleto');
+insert into usuarioconquista values ('teixeira0', 7);
+insert into usuarioconquista values ('teixeira0', 5);
