@@ -18,17 +18,17 @@ class Persistence:
       users.append(x)
     return users
 
-  def getDev(self, game_id):
+  def getDev(self, dev_id):
     cursor=self.__mydb.cursor()
-    cursor.execute("SELECT desenvolvedor_nome FROM desenvolvedor, jogo WHERE jogo.desenvolvedor_id = desenvolvedor.desenvolvedor_id AND jogo_id = " + game_id)
+    cursor.execute("SELECT desenvolvedor_nome FROM desenvolvedor WHERE desenvolvedor_id = " + str(dev_id))
     dev = ""
     for x in cursor:
       dev = x
     return dev[0]    
       
-  def getDist(self, game_id):
+  def getDist(self, dist_id):
     cursor=self.__mydb.cursor()
-    cursor.execute("SELECT distribuidora_nome FROM distribuidora, jogo WHERE jogo.distribuidora_id = distribuidora.distribuidora_id AND jogo_id = " + game_id)
+    cursor.execute("SELECT distribuidora_nome FROM distribuidora WHERE distribuidora_id = " + str(dist_id))
     dist = ""
     for x in cursor:
       dist = x
@@ -36,15 +36,31 @@ class Persistence:
 
   def getGames(self):
     cursor=self.__mydb.cursor()
-    cursor.execute("SELECT * FROM jogo")
+    cursor.execute("SELECT jogo_id, jogo_nome, desenvolvedor_id, distribuidora_id, jogo_preco, jogo_lancamento, jogo_classificacao FROM jogo")
     games = []
     for x in cursor:
       games.append(x)
     return games
 
+  def getGame(self, game_id):
+    cursor=self.__mydb.cursor()
+    cursor.execute("SELECT jogo_nome FROM jogo WHERE jogo_id = " + str(game_id))
+    game = ""
+    for x in cursor:
+      game = x
+    return game[0]    
+
+  def getGamePic(self, game_id):
+    cursor=self.__mydb.cursor()
+    cursor.execute("SELECT jogo_foto FROM jogo WHERE jogo_id = " + str(game_id))
+    pic = ""
+    for x in cursor:
+      pic = x
+    return pic[0]   
+
   def getGenres(self, game_id):
     cursor=self.__mydb.cursor()
-    cursor.execute("SELECT genero_nome FROM jogogenero, jogo, genero WHERE jogo.jogo_id = jogogenero.jogo_id AND genero.genero_id = jogogenero.genero_id AND jogogenero.jogo_id = " + game_id)
+    cursor.execute("SELECT genero_nome FROM jogogenero, jogo, genero WHERE jogo.jogo_id = jogogenero.jogo_id AND genero.genero_id = jogogenero.genero_id AND jogogenero.jogo_id = " + str(game_id))
     genres = []
     for x in cursor:
       genres.append(x[0])
@@ -102,7 +118,7 @@ class Persistence:
   def getTransactionDate(self, username, game_id):
     cursor=self.__mydb.cursor()
     cursor.execute("SELECT transacao_datacompra FROM transacao, carteiravirtual \
-      WHERE transacao.carteira_id = carteiravirtual.carteira_id AND usuario_username = \"" + username +"\" AND jogo_id = " + game_id)
+      WHERE transacao.carteira_id = carteiravirtual.carteira_id AND usuario_username = \"" + username +"\" AND jogo_id = " + str(game_id))
     date = ""
     for x in cursor:
       date = x
@@ -111,12 +127,12 @@ class Persistence:
   def addToWishlist(self, username, game_id, priority):
     cursor=self.__mydb.cursor()
     cursor.execute("INSERT INTO listadesejositem (usuario_username, jogo_id, desejos_item_dataadicao, desejos_item_prioridade) VALUES (\
-      \"" + username + "\" , " + game_id + ", DATE('" + date.today().strftime("%Y-%m-%d") +  "'), " + priority + ")")    
+      \"" + username + "\" , " + str(game_id) + ", DATE('" + date.today().strftime("%Y-%m-%d") +  "'), " + priority + ")")    
     self.__mydb.commit()
 
   def removeFromWishlist(self, username, game_id):
     cursor=self.__mydb.cursor()
-    cursor.execute("DELETE FROM listadesejositem WHERE usuario_username = \"" + username +"\" AND jogo_id = " + game_id)   
+    cursor.execute("DELETE FROM listadesejositem WHERE usuario_username = \"" + username +"\" AND jogo_id = " + str(game_id))   
     self.__mydb.commit()
 
   def addFriend(self, username, friend_username):
@@ -136,18 +152,14 @@ class Persistence:
 
   def changePriority(self, username, game_id, new_priority):
     cursor=self.__mydb.cursor()
-    cursor.execute("UPDATE listadesejositem SET desejos_item_prioridade = " + new_priority + " WHERE usuario_username = '" + username + "' AND jogo_id = " + game_id)
+    cursor.execute("UPDATE listadesejositem SET desejos_item_prioridade = " + new_priority + " WHERE usuario_username = '" + username + "' AND jogo_id = " + str(game_id))
     self.__mydb.commit()
 
   def buyGame(self, username, game_id, payment_method):
     cursor=self.__mydb.cursor()
     cursor.execute("INSERT INTO bibliotecaitem (usuario_username, jogo_id, biblioteca_item_tempojogo) VALUES (\
-      '" + username + "', " + game_id + ", TIME('00:00:00'))")
+      '" + username + "', " + str(game_id) + ", TIME('00:00:00'))")
     cursor.execute("INSERT INTO transacao (carteira_id, jogo_id, transacao_datacompra, transacao_valorcompra, transacao_formapagamento) VALUES (\
-      (SELECT carteira_id FROM carteiravirtual WHERE usuario_username = '" + username + "'), " + game_id + 
-      ", DATE('" + date.today().strftime("%Y-%m-%d") +  "'), (SELECT jogo_preco FROM jogo WHERE jogo_id = " + game_id + "), '" + payment_method + "');")
+      (SELECT carteira_id FROM carteiravirtual WHERE usuario_username = '" + username + "'), " + str(game_id) + 
+      ", DATE('" + date.today().strftime("%Y-%m-%d") +  "'), (SELECT jogo_preco FROM jogo WHERE jogo_id = " + str(game_id) + "), '" + payment_method + "');")
     self.__mydb.commit()
-
-persist = Persistence()
-print(persist.getLibrary("teixeira0"))
-print(persist.getTransactions("teixeira0"))
