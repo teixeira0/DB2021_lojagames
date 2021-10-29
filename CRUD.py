@@ -1,6 +1,8 @@
 from persistencia import Persistence
 from enum import Enum
-from os import system, name
+from os import system
+from PIL import Image
+import io
 
 class States(Enum):
   LOGIN = 1
@@ -120,6 +122,7 @@ class GameStore:
         print(" ")
         print("1 - Comprar jogo.")
         print("2 - Adicionar à Lista de Desejos.")
+        print("3 - Ver imagem do jogo.")
         print(" ")
         print("0 - Voltar.")
         print(" ")
@@ -132,6 +135,12 @@ class GameStore:
           continue
         if (action == "2"):
           self.setState(States.ADD_TO_WISHLIST, (username, game[0]))
+          continue
+        if (action == "3"):
+          blob = self.__persistence.getGamePic(game[0])
+          image = Image.open(io.BytesIO(blob))
+          image.show()
+          self.setState(States.GAME, (username, game))
           continue
 
       if (self.state == States.BUY):
