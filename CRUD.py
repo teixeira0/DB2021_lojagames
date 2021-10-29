@@ -31,7 +31,9 @@ class GameStore:
 
   def run(self):
     while True:
+      
       clear()
+
       if (self.state == States.LOGIN):
         print("Bem-vindo ou bem-vinda a loja de games digitais!")
         username = input("Digite seu username para fazer Login: ")
@@ -267,6 +269,7 @@ class GameStore:
           self.__persistence.removeFriend(username, friends[int(new_friend)-1][0])
           self.setState(States.FRIENDS, username)
           continue
+
       if (self.state == States.WALLET):
         username = self.params
         nickname = self.__persistence.getUser(username)
