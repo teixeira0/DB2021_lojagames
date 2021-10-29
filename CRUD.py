@@ -11,13 +11,8 @@ class States(Enum):
   BUY = 6
   LIBRARY = 7
   WISHLIST = 8
-  REMOVE_FROM_WISHLIST = 9
-  CHANGE_PRIORITY = 10
-  CHANGE_NICKNAME = 11
-  FRIENDS = 12
-  ADD_FRIEND = 13
-  REMOVE_FRIEND = 14
-  WALLET = 15
+  FRIENDS = 9
+  WALLET = 10
 
 def clear():
   system('cls')
@@ -58,7 +53,6 @@ class GameStore:
         print("0 - Log out")
         print(" ")
         action = input("Digite o que deseja fazer: ")
-        print(action)
         if (action == "0"):
           self.setState(States.LOGIN, username)
           continue
@@ -78,7 +72,9 @@ class GameStore:
           self.setState(States.WALLET, username)
           continue
         if (action == "6"):
-          self.setState(States.CHANGE_NICKNAME, username)
+          new_nickname = input("Digite o seu novo Apelido: ")
+          self.__persistence.changeNickname(username, new_nickname)
+          self.setState(States.START, username)
           continue
 
       if (self.state == States.STORE):
@@ -183,14 +179,105 @@ class GameStore:
         self.setState(States.STORE, username)
         continue
 
+      if (self.state == States.LIBRARY):
+        username = self.params
+        nickname = self.__persistence.getUser(username)
+        print(" -- Biblioteca de Jogos de "+ nickname + " -- ")
+        print(" ")
+        games = self.__persistence.getLibrary(username)
+        print("  JOGO  |  TEMPO DE JOGO  |  DATA DE COMPRA ")
+        for game in games:
+          print("  " + game[1] + "  |  " + str(int(game[2].total_seconds()//3600)) + "h" + str(int((game[2].total_seconds()%3600)//60)) + "m  |  " + self.__persistence.getTransactionDate(username, game[0]).strftime("%d/%m/%Y"))
+        print(" ")
+        input("Pressione 'enter' para retornar.")
+        self.setState(States.START, username)
+        continue        
 
+      if (self.state == States.WISHLIST):
+        username = self.params
+        nickname = self.__persistence.getUser(username)
+        print(" -- Lista de Desejos de "+ nickname + " -- ")
+        print(" ")
+        games = self.__persistence.getWishlist(username)
+        print("  ITEM  |  JOGO  |  DATA DE ADIÇÃO  |  PRIORIDADE ")
+        item = 1
+        for game in games:
+          print("  " + str(item) + "  |  " + game[1] + "  |  " + game[2].strftime("%d/%m/%Y") + "  |  " + str(game[3]))
+          item += 1
+        print(" ")
+        print(" ")
+        print("1 - Mudar a prioridadede um item.")
+        print("2 - Remover um item da lista.")
+        print(" ")
+        print("0 - Voltar.")
+        print(" ")
+        action = input(nickname + ", digite o que deseja fazer: ")
+        if (action == "0"):
+          self.setState(States.START,username)
+          continue
+        if (action == "1"):
+          item = input("Digite o numero do item que gostaria de modificar: ")
+          priority = input("Digite o novo valor de prioridade para este item: ")
+          self.__persistence.changePriority(username, games[int(item)-1][0], priority)
+          self.setState(States.WISHLIST, username)
+          continue
+        if (action == "2"):
+          item = input("Digite o numero do item que gostaria de remover: ")
+          self.__persistence.removeFromWishlist(username, games[int(item)-1][0])
+          self.setState(States.WISHLIST, username)
+          continue   
 
-      
-
-
-
-
-
+      if (self.state == States.FRIENDS):
+        username = self.params
+        nickname = self.__persistence.getUser(username)
+        print(" -- Amigos de "+ nickname + " -- ")
+        print(" ")
+        friends = self.__persistence.getFriends(username)
+        item = 1
+        for friend in friends:
+          print("  " + str(item) + "  |  " + friend[1])
+          item += 1
+        print(" ")
+        print(" ")
+        print("1 - Adicionar um amigo.")
+        print("2 - Remover um amigo.")
+        print(" ")
+        print("0 - Voltar.")
+        print(" ")
+        action = input(nickname + ", digite o que deseja fazer: ")
+        if (action == "0"):
+          self.setState(States.START,username)
+          continue              
+        if (action == "1"):
+          new_friend = input("Digite o username do amigo que deseja adicionar: ")
+          self.__persistence.addFriend(username, new_friend)
+          self.setState(States.FRIENDS, username)
+          continue
+        if (action == "2"):
+          new_friend = input("Digite o numero do amigo que deseja remover da lista: ")
+          self.__persistence.removeFriend(username, friends[int(new_friend)-1][0])
+          self.setState(States.FRIENDS, username)
+          continue
+      if (self.state == States.WALLET):
+        username = self.params
+        nickname = self.__persistence.getUser(username)
+        print(" -- Carteira Virtual de "+ nickname + " -- ")
+        print(" ") 
+        wallet = self.__persistence.getWallet(username)
+        print("Saldo: R$ " + str(wallet[1]))
+        print(" ")
+        print(" -- Transações -- ") 
+        print(" ")
+        print("  ITEM  |  JOGO  |  VALOR DA COMPRA  |  DATA DA COMPRA  |  FORMA DE PAGAMENTO")
+        transactions = self.__persistence.getTransactions(username)
+        item = 1
+        for transaction in transactions:
+          print("  " + str(item) + "  |  " + transaction[0] + "  |  R$ " + str(transaction[1]) + "  |  " + transaction[2].strftime("%d/%m/%Y") + "  |  " + transaction[3])
+          item += 1
+        print(" ")
+        input("Pressione 'enter' para retornar.")
+        self.setState(States.START, username)
+        continue 
 
 
 store = GameStore()
